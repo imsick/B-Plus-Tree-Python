@@ -1,3 +1,5 @@
+import math
+
 
 class MyBPlusTreeNode:
 
@@ -57,7 +59,7 @@ class MyBPlusTreeNode:
         self.count = len(new_self_keys)
         self.is_leaf = False
 
-    def check_count(self):
+    def check_count_too_big(self):
         if self.count > self.m:
             if self.father:
                 self.branch_divide()
@@ -79,7 +81,7 @@ class MyBPlusTreeNode:
                 i -= 1
                 self.keys[i] = key
             self.children[i].add_key(key)
-        self.check_count()
+        self.check_count_too_big()
 
     def find_key(self, key):
         if self.count == 0:
@@ -97,13 +99,63 @@ class MyBPlusTreeNode:
         else:
             return self.children[i].find_key(key)
 
-    def change_key_by_deletion(self, changed_child, new_key):
+    def borrow_from_right_brother_node(self):
+        if not self.next_node:
+            return False
+        right_brother_node = self.next_node
+        if right_brother_node.father is not self.father:
+            return False
+        if right_brother_node.count <= math.ceil(self.m/2):
+            return False
+        self.keys.append(right_brother_node.keys.pop(0))
+        self.children.append(right_brother_node.children.pop(0))
+        self.count += 1
+        right_brother_node.count -= 1
+        return True
+
+    def borrow_from_left_brother_node(self):
+        father = self.father
+        i = 0
+        while i < self.count:
+            if father.children[i] is self:
+                break
+            i += 1
+        if i == 0:
+            return False
+        left_brother_node = father.children[i-1]
+        if left_brother_node.count <= math.ceil(self.m/2):
+            return False
+        self.keys.append(left_brother_node.keys.pop())
+        self.children.append(left_brother_node.children.pop())
+        father.keys[i-1] = left_brother_node.keys[-1]
+        self.count += 1
+        left_brother_node.count -= 1
+        return True
+
+    def check_count_too_small(self):
+        least_count = math.ceil(self.m/2)
+        if self.count < least_count:
+            # 如果是根节点
+            if self.father:
+                pass  # TBD
+            else:
+                # 先找右边兄弟节点借
+                if self.borrow_from_right_brother_node():
+                    pass
+                # 再找左边兄弟节点借
+                elif self.borrow_from_left_brother_node():
+                    pass
+                else:
+                    pass  # TBD
+        pass
+
+    def change_key_recursively(self, changed_child, new_key):
         i = 0
         while i < self.count:
             if self.children[i] is changed_child:
                 self.keys[i] = new_key
                 if self.father and i == self.count-1:
-                    self.father.change_key_by_deletion(self, new_key)
+                    self.father.change_key_recursively(self, new_key)
                 break
             i += 1
 
@@ -115,9 +167,12 @@ class MyBPlusTreeNode:
                 self.count -= 1
             else:
                 if self.keys[index] != self.keys[index-1]:
-                    self.father.change_key_by_deletion(self, self.keys[index-1])
+                    self.father.change_key_recursively(self, self.keys[index - 1])
         else:
             self.keys.pop(index)
+        if self.father:
+            # 如果不是在根节点处的叶子节点
+            self.check_count_too_small()
 
 
 class MyBPlusTree:
