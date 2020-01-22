@@ -12,6 +12,10 @@ class MyBPlusTreeNode:
         self.next_node = next_node
 
     def root_divide(self):
+        """
+        出现某节点元素过多需要分裂时分为两种情况
+        如果是根的话 保留根节点 并新建左右孩子初始化 再修改所有受影响的值
+        """
         mid_point = self.m // 2
         left_child_keys = self.keys[:mid_point+1]
         right_child_keys = self.keys[mid_point+1:]
@@ -29,6 +33,7 @@ class MyBPlusTreeNode:
         self.is_leaf = False
 
     def branch_divide(self):
+        """如果是非根的话 新建兄弟节点并初始化 再修改所有受影响的值"""
         mid_point = self.m // 2
         new_self_keys = self.keys[:mid_point+1]
         new_node_keys = self.keys[mid_point+1:]
@@ -69,6 +74,7 @@ class MyBPlusTreeNode:
             self.keys.insert(i, key)
             self.count += 1
         else:
+            # 插入该值后该节点的最大key值变大 需要做相应修改
             if i == self.count:
                 i -= 1
                 self.keys[i] = key
@@ -90,6 +96,9 @@ class MyBPlusTreeNode:
                 return None
         else:
             return self.children[i].find_key(key)
+
+    def delete_key(self, leaf_node, index):
+        pass
 
 
 class MyBPlusTree:
