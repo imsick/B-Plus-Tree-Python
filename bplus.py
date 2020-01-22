@@ -1,11 +1,11 @@
 
 class MyBPlusTreeNode:
 
-    def __init__(self, m, keys=[], children=[], father=None, next_node=None):
+    def __init__(self, m, keys=None, children=None, father=None, next_node=None):
         self.is_leaf = len(children) == 0
         # 列表判空https://www.cnblogs.com/ayistar/p/11371146.html
-        self.keys = keys
-        self.children = children
+        self.keys = keys if keys else []
+        self.children = children if children else []
         self.count = len(keys)
         self.m = m
         self.father = father
@@ -97,8 +97,27 @@ class MyBPlusTreeNode:
         else:
             return self.children[i].find_key(key)
 
-    def delete_key(self, leaf_node, index):
-        pass
+    def change_key_by_deletion(self, changed_child, new_key):
+        i = 0
+        while i < self.count:
+            if self.children[i] is changed_child:
+                self.keys[i] = new_key
+                if self.father and i == self.count-1:
+                    self.father.change_key_by_deletion(self, new_key)
+                break
+            i += 1
+
+    def delete_key(self, index):
+        if index == self.count-1:
+            if index == 0:
+                # B+树中只有一个key
+                self.keys.pop()
+                self.count -= 1
+            else:
+                if self.keys[index] != self.keys[index-1]:
+                    self.father.change_key_by_deletion(self, self.keys[index-1])
+        else:
+            self.keys.pop(index)
 
 
 class MyBPlusTree:
@@ -113,4 +132,3 @@ class MyBPlusTree:
 
     def find_key(self, key):
         return self.root.find_key(key)
-
