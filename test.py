@@ -59,6 +59,7 @@ def test2():
     tree.delete_key(1)
     print(1)
 
+
 def test3():
     tree = MyBPlusTree()
     tree.add_key(1)
@@ -86,6 +87,7 @@ def test3():
     tree.add_key(23)
     tree.add_key(25)
     print(tree.find_key(23))
+
 
 def test4():
     tree = MyBPlusTree()
