@@ -1,4 +1,5 @@
 from bplus import MyBPlusTree
+import graph
 
 
 def test1():
@@ -7,17 +8,13 @@ def test1():
     tree.add_key(6)
     tree.add_key(3)
     tree.add_key(4)
-
     tree.add_key(9)
     tree.add_key(7)
-
-
     tree.add_key(11)
     tree.add_key(12)
     tree.add_key(13)
     tree.add_key(14)
     print(tree.find_key(13))
-
     tree.add_key(15)
     tree.add_key(17)
     tree.add_key(19)
@@ -33,12 +30,10 @@ def test2():
     tree.add_key(1)
     tree.add_key(1)
     tree.add_key(1)
-
     tree.add_key(1)
     tree.add_key(1)
     tree.add_key(1)
     tree.add_key(1)
-
     tree.add_key(1)
     tree.add_key(1)
     tree.add_key(1)
@@ -47,17 +42,14 @@ def test2():
     tree.delete_key(1)
     tree.delete_key(1)
     tree.delete_key(1)
-
     tree.delete_key(1)
     tree.delete_key(1)
     tree.delete_key(1)
     tree.delete_key(1)
-
     tree.delete_key(1)
     tree.delete_key(1)
     tree.delete_key(1)
     tree.delete_key(1)
-    print(1)
 
 
 def test3():
@@ -69,17 +61,12 @@ def test3():
     # tree.delete_key(3)
     tree.add_key(9)
     tree.add_key(7)
-
-
     tree.add_key(11)
     tree.add_key(12)
-
-
     tree.add_key(13)
     tree.delete_key(7)
     tree.add_key(14)
     print(tree.find_key(13))
-
     tree.add_key(15)
     tree.add_key(17)
     tree.add_key(19)
@@ -87,6 +74,7 @@ def test3():
     tree.add_key(23)
     tree.add_key(25)
     print(tree.find_key(23))
+    graph.show_graph(tree)
 
 
 def test4():
@@ -99,8 +87,7 @@ def test4():
     tree.delete_key(6)
     tree.delete_key(1)
     tree.delete_key(4)
-    print(1)
 
 
-test2()
+test3()
 

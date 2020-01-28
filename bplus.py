@@ -229,10 +229,9 @@ class MyBPlusTreeNode:
 
 class MyBPlusTree:
 
-    M = 3
-
-    def __init__(self):
-        self.root = MyBPlusTreeNode(MyBPlusTree.M)
+    def __init__(self, m=3):
+        self.m = m
+        self.root = MyBPlusTreeNode(self.m)
 
     def add_key(self, key):
         self.root.add_key(key)
